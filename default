@@ -1,0 +1,39 @@
+server {
+	listen 80 default_server;
+	listen [::]:80 default_server;
+
+	root /var/www/html;
+
+	# Add index.php to the list if you are using PHP
+	index index.php index.html;
+
+	server_name _;
+	#html folder dotorh default tohirgoo
+	location / {
+        	try_files $uri $uri/ /index.php?$args;
+    	}
+
+	# /html folder dotorh Worpress /wp/moc gesen folder dotorh site ajilluulah path
+        location /wp/moc/ {
+                try_files $uri $uri/ /wp/moc/index.php?$args; 
+        }
+	#sub site drammamn
+	location /wp/moc/drammamn {
+                try_files $uri $uri/ /wp/moc/drammamn/index.php?$args; 
+        }
+	#test sunny ah site
+	location {
+                try_files $uri $uri/ index.php?$args; 
+        }
+	location ~ \.php$ {
+		include snippets/fastcgi-php.conf;
+	
+	#	# With php-fpm (or other unix sockets):
+		#fastcgi_pass unix:/var/run/php/php8.0-fpm.sock;
+		fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+		include fastcgi_params;
+	#	# With php-cgi (or other tcp sockets):
+		fastcgi_pass 127.0.0.1:9000;
+	}
+
+}
